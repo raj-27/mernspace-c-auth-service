@@ -1,0 +1,11 @@
+{
+  "name": "auth-service",
+  "version": "1.0.0",
+  "description": "A user management service ",
+  "main": "index.js",
+  "scripts": {
+    "test": "node src/server.js"
+  },
+  "author": "Raj Yadav <raj819314@gmail.com>",
+  "license": "ISC"
+}
