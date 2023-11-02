@@ -7,5 +7,9 @@
     "test": "node src/server.js"
   },
   "author": "Raj Yadav <raj819314@gmail.com>",
-  "license": "ISC"
+  "license": "ISC",
+  "devDependencies": {
+    "@types/node": "^20.8.10",
+    "typescript": "^5.2.2"
+  }
 }
