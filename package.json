@@ -8,7 +8,7 @@
     "format:check": "prettier . --check",
     "format:fix": "prettier . --write",
     "lint": "eslint .",
-    "list:fix": "eslint . --fix",
+    "lint:fix": "eslint . --fix",
     "prepare": "husky install"
   },
   "author": "Raj Yadav <raj819314@gmail.com>",
@@ -19,6 +19,14 @@
     "@typescript-eslint/parser": "^6.9.1",
     "eslint": "^8.52.0",
     "husky": "^8.0.3",
+    "lint-staged": "^15.0.2",
+    "prettier": "3.0.3",
     "typescript": "^5.2.2"
+  },
+  "lint-staged": {
+    "*.ts": [
+      "npm run lint:fix",
+      "npm run format:fix"
+    ]
   }
 }
