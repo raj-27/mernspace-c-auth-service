@@ -7,9 +7,9 @@ const startServer = () => {
         app.listen(Config.PORT, () =>
             logger.info(`listening on port ${Config.PORT}`),
         );
-    } catch (error) {
-        if (error instanceof Error) {
-            logger.error(error.message);
+    } catch (err) {
+        if (err instanceof Error) {
+            logger.error(err?.message);
             setTimeout(() => {
                 process.exit();
             }, 1000);
