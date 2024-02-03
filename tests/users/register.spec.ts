@@ -3,7 +3,7 @@ import app from "../../src/app";
 import { DataSource } from "typeorm";
 import { AppDataSource } from "../../src/config/data-source";
 import { User } from "../../src/entity/User";
-import { truncateTable } from "../utils";
+import { Roles } from "../../src/constants";
 
 describe("POST /auth/register", () => {
     let connection: DataSource;
@@ -13,7 +13,8 @@ describe("POST /auth/register", () => {
 
     beforeEach(async () => {
         // Database truncate
-        await truncateTable(connection);
+        await connection.dropDatabase();
+        await connection.synchronize();
     });
 
     afterAll(async () => {
@@ -75,6 +76,25 @@ describe("POST /auth/register", () => {
             expect(users[0].firstName).toBe(userData.firstName);
             expect(users[0].lastName).toBe(userData.lastName);
             expect(users[0].email).toBe(userData.email);
+        });
+
+        it("should assign a customer role", async () => {
+            // Arrange
+            const userData = {
+                firstName: "Raj",
+                lastName: "Yadav",
+                email: "demo123@gmail.com",
+                password: "secret",
+            };
+
+            // Act
+            await request(app).post("/auth/register").send(userData);
+
+            // Assert
+            const userRespository = connection.getRepository(User);
+            const users = await userRespository.find();
+            expect(users[0]).toHaveProperty("role");
+            expect(users[0].role).toBe(Roles.CUSTOMER);
         });
     });
     describe("Fields are missing", () => {});
