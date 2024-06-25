@@ -7,6 +7,7 @@ import { Roles } from "../../src/constants";
 
 describe("POST /auth/register", () => {
     let connection: DataSource;
+
     beforeAll(async () => {
         connection = await AppDataSource.initialize();
     });
@@ -139,5 +140,47 @@ describe("POST /auth/register", () => {
             expect(users.length).toBe(1);
         });
     });
-    describe("Fields are missing", () => {});
+    describe("Fields are missing", () => {
+        it("should return 404 status code if email field is missing", async () => {
+            // Arrange
+            const userData = {
+                firstName: "Raj",
+                lastName: "Yadav",
+                email: "",
+                password: "secret",
+            };
+
+            // Act
+            const response = await request(app)
+                .post("/auth/register")
+                .send(userData);
+
+            // Assert
+            expect(response.statusCode).toBe(400);
+            const userRespository = connection.getRepository(User);
+            const users = await userRespository.find();
+            expect(users).toHaveLength(0);
+        });
+    });
+
+    describe("Fields are not in proper format", () => {
+        it("should trim email field", async () => {
+            // Arrange
+            const userData = {
+                firstName: "Raj",
+                lastName: "Yadav",
+                email: " raj819314@gmail.com ",
+                password: "secret",
+            };
+
+            // Act
+            await request(app).post("/auth/register").send(userData);
+
+            // Assert
+            const userRepository = connection.getRepository(User);
+            const users = await userRepository.find();
+            const user = users[0];
+            expect(user.email).toBe("raj819314@gmail.com");
+        });
+    });
 });
