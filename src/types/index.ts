@@ -1,4 +1,5 @@
 import { Request } from "express";
+import { User } from "../entity/User";
 
 export interface UserData {
     firstName: string;
@@ -9,4 +10,10 @@ export interface UserData {
 
 export interface RegisterUserRequest extends Request {
     body: UserData;
+}
+
+export interface NewRefreshToken {
+    user: User;
+    expiresAt: number;
+    id: string;
 }
