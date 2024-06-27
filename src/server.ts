@@ -5,8 +5,9 @@ import logger from "./config/logger";
 
 const startServer = async () => {
     try {
-        await AppDataSource.initialize();
-        logger.info("Database Conneced Successfuly!");
+        await AppDataSource.initialize().then(() =>
+            logger.info("Database Conneced Successfuly!"),
+        );
         app.listen(Config.PORT, () =>
             logger.info(`listening on port ${Config.PORT}`),
         );

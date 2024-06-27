@@ -28,9 +28,9 @@ describe("POST /auth/register", () => {
         it("Should return the 201 status code", async () => {
             // Arrange
             const userData = {
-                firstName: "Raj",
-                lastName: "Yadav",
-                email: "demo123@gmail.com",
+                firstName: "John",
+                lastName: "Doe",
+                email: "johndoe12@gmail.com",
                 password: "secret",
             };
             // Act
@@ -45,9 +45,9 @@ describe("POST /auth/register", () => {
         it("It should return valid json", async () => {
             // Arrange
             const userData = {
-                firstName: "Raj",
-                lastName: "Yadav",
-                email: "demo123@gmail.com",
+                firstName: "John",
+                lastName: "Doe",
+                email: "johndoe12@gmail.com",
                 password: "secret",
             };
             // Act
@@ -64,9 +64,9 @@ describe("POST /auth/register", () => {
         it("should persist the user in the database", async () => {
             // Arrange
             const userData = {
-                firstName: "Raj",
-                lastName: "Yadav",
-                email: "demo123@gmail.com",
+                firstName: "John",
+                lastName: "Doe",
+                email: "johndoe12@gmail.com",
                 password: "secret",
             };
             // Act
@@ -84,9 +84,9 @@ describe("POST /auth/register", () => {
         it("should assign a customer role", async () => {
             // Arrange
             const userData = {
-                firstName: "Raj",
-                lastName: "Yadav",
-                email: "demo123@gmail.com",
+                firstName: "John",
+                lastName: "Doe",
+                email: "johndoe12@gmail.com",
                 password: "secret",
             };
 
@@ -103,9 +103,9 @@ describe("POST /auth/register", () => {
         it("It should store hashed password in the database", async () => {
             // Arrange
             const userData = {
-                firstName: "Raj",
-                lastName: "Yadav",
-                email: "demo123@gmail.com",
+                firstName: "John",
+                lastName: "Doe",
+                email: "johndoe12@gmail.com",
                 password: "secret",
             };
 
@@ -123,9 +123,9 @@ describe("POST /auth/register", () => {
         it("should return 400 status code if email is already exits", async () => {
             // Arrange
             const userData = {
-                firstName: "Raj",
-                lastName: "Yadav",
-                email: "demo123@gmail.com",
+                firstName: "John",
+                lastName: "Doe",
+                email: "johndoe12@gmail.com",
                 password: "secret",
             };
 
@@ -145,9 +145,9 @@ describe("POST /auth/register", () => {
         it("should return the access token and refresh token inside the cookies ", async () => {
             // Arrange
             const userData = {
-                firstName: "Raj",
-                lastName: "Yadav",
-                email: "raj819314@gmail.com",
+                firstName: "John",
+                lastName: "Doe",
+                email: "johndoe12@gmail.com",
                 password: "secret",
             };
 
@@ -183,9 +183,9 @@ describe("POST /auth/register", () => {
         it("should store refresh token in the database", async () => {
             // Arrange
             const userData = {
-                firstName: "Raj",
-                lastName: "Yadav",
-                email: "demo123@gmail.com",
+                firstName: "John",
+                lastName: "Doe",
+                email: "johndoe12@gmail.com",
                 password: "secret",
             };
 
@@ -210,8 +210,8 @@ describe("POST /auth/register", () => {
         it("should return 404 status code if email field is missing", async () => {
             // Arrange
             const userData = {
-                firstName: "Raj",
-                lastName: "Yadav",
+                firstName: "John",
+                lastName: "Doe",
                 email: "",
                 password: "secret",
             };
@@ -233,9 +233,9 @@ describe("POST /auth/register", () => {
         it("should trim email field", async () => {
             // Arrange
             const userData = {
-                firstName: "Raj",
-                lastName: "Yadav",
-                email: " raj819314@gmail.com ",
+                firstName: "John",
+                lastName: "Doe",
+                email: " johndoe12@gmail.com ",
                 password: "secret",
             };
 
@@ -246,7 +246,7 @@ describe("POST /auth/register", () => {
             const userRepository = connection.getRepository(User);
             const users = await userRepository.find();
             const user = users[0];
-            expect(user.email).toBe("raj819314@gmail.com");
+            expect(user.email).toBe("johndoe12@gmail.com");
         });
     });
 });

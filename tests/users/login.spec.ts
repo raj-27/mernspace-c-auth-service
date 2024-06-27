@@ -24,7 +24,7 @@ describe.skip("POST /auth/login", () => {
         it("Should return 201 Status Code", async () => {
             // Arrange
             const userData = {
-                email: "raj819314@gmail.com",
+                email: "johndoe12@gmail.com",
                 password: "secret",
             };
 
