@@ -1,16 +1,12 @@
 import express, { NextFunction, Request, Response } from "express";
-import { AuthController } from "../controllers/AuthController";
-import { UserService } from "../service/UserService";
 import { AppDataSource } from "../config/data-source";
-import { User } from "../entity/User";
 import logger from "../config/logger";
-import registerValidator from "../validators/register-validator";
-import { TokenService } from "../service/TokenService";
-import { RefreshToken } from "../entity/RefreshToken";
-import loginValidator from "../validators/login-validator";
-import { CredentialService } from "../service/CredentialService";
-import authenicate from "../middlewares/authenicate";
 import { AuthRequst } from "../types";
+import { authenicate, validateRefreshToken } from "../middlewares";
+import { CredentialService, TokenService, UserService } from "../service";
+import { loginValidator, registerValidator } from "../validators";
+import { AuthController } from "../controllers";
+import { RefreshToken, User } from "../entity";
 
 const router = express.Router();
 const userRepository = AppDataSource.getRepository(User);
@@ -41,6 +37,13 @@ router.post(
 
 router.get("/self", authenicate, (req: Request, res: Response) =>
     authController.self(req as AuthRequst, res),
+);
+
+router.post(
+    "/refresh",
+    validateRefreshToken,
+    (req: Request, res: Response, next: NextFunction) =>
+        authController.refresh(req as AuthRequst, res, next),
 );
 
 export default router;

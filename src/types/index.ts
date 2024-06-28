@@ -15,10 +15,15 @@ export interface AuthRequst extends Request {
     auth: {
         sub: number;
         role: string;
+        id?: string;
     };
 }
 
 export interface AuthCookie {
     accessToken: string;
     refreshToken: string;
+}
+
+export interface iRefreshTokenPayload {
+    id: string;
 }

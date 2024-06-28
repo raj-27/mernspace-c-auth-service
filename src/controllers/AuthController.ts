@@ -1,14 +1,12 @@
 import { NextFunction, Response } from "express";
 import { AuthRequst, RegisterUserRequest } from "../types";
-import { UserService } from "../service/UserService";
 import { Logger } from "winston";
 import { JwtPayload } from "jsonwebtoken";
 import { validationResult } from "express-validator";
-import { TokenService } from "../service/TokenService";
 import createHttpError from "http-errors";
-import { CredentialService } from "../service/CredentialService";
+import { CredentialService, TokenService, UserService } from "../service";
 
-export class AuthController {
+class AuthController {
     constructor(
         private userService: UserService,
         private logger: Logger,
@@ -158,4 +156,52 @@ export class AuthController {
         const user = await this.userService.findById(req.auth.sub);
         res.json({ ...user, password: undefined });
     }
+
+    // Refresh
+    async refresh(req: AuthRequst, res: Response, next: NextFunction) {
+        try {
+            const payload = {
+                sub: String(req.auth.sub),
+                role: req.auth.role,
+            };
+
+            const accessToken = this.tokenService.generateAccessToken(payload);
+            const user = await this.userService.findById(req.auth.sub);
+
+            if (!user) {
+                next(createHttpError(400, "User with token could not find"));
+                return;
+            }
+
+            const newRefreshToken =
+                await this.tokenService.persistRefreshToken(user);
+
+            // Deleting Old Refresh Token
+            await this.tokenService.deleteRefreshToken(Number(req.auth.id));
+
+            const refreshToken = this.tokenService.generateRefreshToken({
+                ...payload,
+                id: String(newRefreshToken.id),
+            });
+
+            res.cookie("accessToken", accessToken, {
+                domain: "localhost",
+                sameSite: "strict",
+                maxAge: 1000 * 60 * 60, //? 1 Hour
+                httpOnly: true, //! Very Important
+            });
+            res.cookie("refreshToken", refreshToken, {
+                domain: "localhost",
+                sameSite: "strict",
+                maxAge: 1000 * 60 * 60 * 24 * 365, //? 365 Days
+                httpOnly: true, //! Very Important
+            });
+            res.json({
+                id: user.id,
+            });
+        } catch (error) {
+            next(createHttpError(400, "Error While Refreshing Refresh Token"));
+        }
+    }
 }
+export default AuthController;

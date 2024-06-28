@@ -1,11 +1,11 @@
 import { Repository } from "typeorm";
 import bcrypt from "bcrypt";
-import { User } from "../entity/User";
 import { UserData } from "../types";
 import createHttpError from "http-errors";
 import { Roles } from "../constants";
+import { User } from "../entity";
 
-export class UserService {
+class UserService {
     constructor(private userRepository: Repository<User>) {}
     async create({ firstName, lastName, email, password }: UserData) {
         const user = await this.userRepository.findOne({
@@ -51,3 +51,4 @@ export class UserService {
         });
     }
 }
+export default UserService;

@@ -6,10 +6,10 @@ import {
     PrimaryGeneratedColumn,
     UpdateDateColumn,
 } from "typeorm";
-import { User } from "./User";
+import User from "./User";
 
 @Entity()
-export class RefreshToken {
+class RefreshToken {
     @PrimaryGeneratedColumn()
     id: number;
 
@@ -25,3 +25,5 @@ export class RefreshToken {
     @CreateDateColumn()
     createdAt: number;
 }
+
+export default RefreshToken;
