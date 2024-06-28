@@ -151,6 +151,26 @@ class AuthController {
         }
     }
 
+    // Logout User
+    async logout(req: AuthRequst, res: Response, next: NextFunction) {
+        try {
+            await this.tokenService.deleteRefreshToken(Number(req.auth.id));
+            this.logger.info("Refresh Token has been deleted!", {
+                tokenId: req.auth.id,
+            });
+            this.logger.info("User has been loged out", {
+                id: req.auth.sub,
+            });
+            res.clearCookie("accessToken");
+            res.clearCookie("refreshToken");
+            res.json({
+                messgae: "User has been loged out!",
+            });
+        } catch (error) {
+            return next(createHttpError(400, "Error While Logoging out!"));
+        }
+    }
+
     // Self
     async self(req: AuthRequst, res: Response) {
         const user = await this.userService.findById(req.auth.sub);

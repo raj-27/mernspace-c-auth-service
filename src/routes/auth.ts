@@ -2,7 +2,11 @@ import express, { NextFunction, Request, Response } from "express";
 import { AppDataSource } from "../config/data-source";
 import logger from "../config/logger";
 import { AuthRequst } from "../types";
-import { authenicate, validateRefreshToken } from "../middlewares";
+import {
+    authenicate,
+    parseRefreshToken,
+    validateRefreshToken,
+} from "../middlewares";
 import { CredentialService, TokenService, UserService } from "../service";
 import { loginValidator, registerValidator } from "../validators";
 import { AuthController } from "../controllers";
@@ -44,6 +48,14 @@ router.post(
     validateRefreshToken,
     (req: Request, res: Response, next: NextFunction) =>
         authController.refresh(req as AuthRequst, res, next),
+);
+
+router.post(
+    "/logout",
+    authenicate,
+    parseRefreshToken,
+    (req: Request, res: Response, next: NextFunction) =>
+        authController.logout(req as AuthRequst, res, next),
 );
 
 export default router;
