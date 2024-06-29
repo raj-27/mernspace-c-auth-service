@@ -3,7 +3,7 @@ import { AppDataSource } from "../config/data-source";
 import logger from "../config/logger";
 import { AuthRequst } from "../types";
 import {
-    authenicate,
+    authenticate,
     parseRefreshToken,
     validateRefreshToken,
 } from "../middlewares";
@@ -39,7 +39,7 @@ router.post(
         authController.login(req, res, next),
 );
 
-router.get("/self", authenicate, (req: Request, res: Response) =>
+router.get("/self", authenticate, (req: Request, res: Response) =>
     authController.self(req as AuthRequst, res),
 );
 
@@ -52,7 +52,7 @@ router.post(
 
 router.post(
     "/logout",
-    authenicate,
+    authenticate,
     parseRefreshToken,
     (req: Request, res: Response, next: NextFunction) =>
         authController.logout(req as AuthRequst, res, next),
