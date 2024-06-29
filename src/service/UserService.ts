@@ -2,12 +2,11 @@ import { Repository } from "typeorm";
 import bcrypt from "bcrypt";
 import { UserData } from "../types";
 import createHttpError from "http-errors";
-import { Roles } from "../constants";
 import { User } from "../entity";
 
 class UserService {
     constructor(private userRepository: Repository<User>) {}
-    async create({ firstName, lastName, email, password }: UserData) {
+    async create({ firstName, lastName, email, password, role }: UserData) {
         const user = await this.userRepository.findOne({
             where: { email: email },
         });
@@ -24,7 +23,7 @@ class UserService {
                 lastName,
                 email,
                 password: hashedPassword,
-                role: Roles.CUSTOMER,
+                role,
             });
         } catch (err) {
             const error = createHttpError(
@@ -42,7 +41,6 @@ class UserService {
             },
         });
     }
-
     async findById(id: number) {
         return await this.userRepository.findOne({
             where: {

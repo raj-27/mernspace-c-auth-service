@@ -5,6 +5,7 @@ import { JwtPayload } from "jsonwebtoken";
 import { validationResult } from "express-validator";
 import createHttpError from "http-errors";
 import { CredentialService, TokenService, UserService } from "../service";
+import { Roles } from "../constants";
 
 class AuthController {
     constructor(
@@ -37,6 +38,7 @@ class AuthController {
                 lastName,
                 email,
                 password,
+                role: Roles.CUSTOMER,
             });
             this.logger.info("User has been register", { id: user.id });
 
