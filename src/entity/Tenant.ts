@@ -1,13 +1,25 @@
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import {
+    Column,
+    CreateDateColumn,
+    Entity,
+    PrimaryGeneratedColumn,
+    UpdateDateColumn,
+} from "typeorm";
 
 @Entity({ name: "tenants" })
 export default class Tenant {
     @PrimaryGeneratedColumn()
     id: number;
 
-    @Column()
+    @Column("varchar", { length: 100 })
     name: string;
 
-    @Column()
+    @Column("varchar", { length: 255 })
     address: string;
+
+    @UpdateDateColumn()
+    updatedAt: number;
+
+    @CreateDateColumn()
+    createdAt: number;
 }
