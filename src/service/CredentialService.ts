@@ -1,4 +1,4 @@
-import bcrypt from "bcrypt";
+import bcrypt from "bcryptjs";
 class CredentialService {
     async comparePassword(userPassord: string, hashedPassword: string) {
         return await bcrypt.compare(userPassord, hashedPassword);
