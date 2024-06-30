@@ -1,1 +1,1 @@
-Our Awesome Auth Service
+Our Awesome Auth Service!
