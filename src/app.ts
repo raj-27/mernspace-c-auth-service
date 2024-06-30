@@ -8,8 +8,8 @@ import { globalErrorHandler } from "./middlewares";
 
 const app = express();
 app.use(express.static("public"));
-app.use(cookieParser());
 app.use(express.json());
+app.use(cookieParser());
 
 app.get("/", async (req, res) => {
     res.send("Welcome to auth service");
