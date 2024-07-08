@@ -38,7 +38,7 @@ class AuthController {
                 lastName,
                 email,
                 password,
-                role: Roles.CUSTOMER,
+                role: Roles.MANAGER,
             });
             this.logger.info("User has been register", { id: user.id });
 
@@ -182,18 +182,18 @@ class AuthController {
     // Refresh
     async refresh(req: AuthRequst, res: Response, next: NextFunction) {
         try {
-            const payload = {
-                sub: String(req.auth.sub),
-                role: req.auth.role,
-            };
-
-            const accessToken = this.tokenService.generateAccessToken(payload);
             const user = await this.userService.findById(req.auth.sub);
 
             if (!user) {
                 next(createHttpError(400, "User with token could not find"));
                 return;
             }
+            const payload = {
+                sub: String(req.auth.sub),
+                role: req.auth.role,
+            };
+
+            const accessToken = this.tokenService.generateAccessToken(payload);
 
             const newRefreshToken =
                 await this.tokenService.persistRefreshToken(user);
