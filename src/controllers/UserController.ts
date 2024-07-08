@@ -5,7 +5,6 @@ import { validationResult } from "express-validator";
 
 export default class UserController {
     constructor(private userService: UserService) {}
-
     async create(req: CreateUserRequest, res: Response, next: NextFunction) {
         // Validation
         const result = validationResult(req);
@@ -14,7 +13,6 @@ export default class UserController {
         }
         const { firstName, lastName, email, password, role, tenantId } =
             req.body;
-
         try {
             const user = await this.userService.create({
                 firstName,
@@ -29,7 +27,6 @@ export default class UserController {
             next(err);
         }
     }
-
     async getAll(req: Request, res: Response, next: NextFunction) {
         const result = validationResult(req);
         if (!result.isEmpty()) {
