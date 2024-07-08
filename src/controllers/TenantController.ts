@@ -1,10 +1,10 @@
 import { NextFunction, Response } from "express";
 import createHttpError from "http-errors";
 import { TenantService } from "../service";
-import { CreateTenantRequest, TenantQueryParams } from "../types";
+import { CreateTenantRequest } from "../types";
 import { Logger } from "winston";
 import { Request } from "express-jwt";
-import { matchedData, validationResult } from "express-validator";
+import { validationResult } from "express-validator";
 
 export default class TenantController {
     constructor(
@@ -56,21 +56,17 @@ export default class TenantController {
 
     // Method to get list of all tenant
     async getAll(req: Request, res: Response, next: NextFunction) {
-        const validateQuery = matchedData(req, { onlyValidData: true });
+        const result = validationResult(req);
+        if (!result.isEmpty()) {
+            return res.status(400).json({ errors: result.array() });
+        }
         try {
-            const [tenants, count] = await this.tenantService.getAll(
-                validateQuery as TenantQueryParams,
-            );
-
-            res.json({
-                currentPage: (validateQuery as TenantQueryParams).currentPage,
-                perPage: (validateQuery as TenantQueryParams).perPage,
-                total: count,
-                data: tenants,
-            });
+            const tenants = await this.tenantService.getAll();
+            res.json(tenants);
         } catch (error) {
-            next(createHttpError(400, "Error While getting tenant lsit"));
-            return;
+            return next(
+                createHttpError(400, "Error while getting tenant list"),
+            );
         }
     }
 
