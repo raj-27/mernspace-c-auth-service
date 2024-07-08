@@ -1,6 +1,6 @@
 import { Repository } from "typeorm";
 import { Tenant } from "../entity";
-import { ITenant, TenantQueryParams } from "../types";
+import { ITenant } from "../types";
 
 export default class TenantService {
     constructor(private tenantRepository: Repository<Tenant>) {}
@@ -13,23 +13,24 @@ export default class TenantService {
     }
 
     // Getting List of Tenant
-    async getAll(validatedQuery: TenantQueryParams) {
-        const queryBuilder = this.tenantRepository.createQueryBuilder("tenant");
+    async getAll() {
+        return await this.tenantRepository.find();
+        // const queryBuilder = this.tenantRepository.createQueryBuilder("tenant");
 
-        if (validatedQuery.q) {
-            const searchTerm = `%${validatedQuery.q}%`;
-            queryBuilder.where(
-                "CONCAT(tenant.name, ' ', tenant.address) ILike :q",
-                { q: searchTerm },
-            );
-        }
+        // if (validatedQuery.q) {
+        //     const searchTerm = `%${validatedQuery.q}%`;
+        //     queryBuilder.where(
+        //         "CONCAT(tenant.name, ' ', tenant.address) ILike :q",
+        //         { q: searchTerm },
+        //     );
+        // }
 
-        const result = await queryBuilder
-            .skip((validatedQuery.currentPage - 1) * validatedQuery.perPage)
-            .take(validatedQuery.perPage)
-            .orderBy("tenant.id", "DESC")
-            .getManyAndCount();
-        return result;
+        // const result = await queryBuilder
+        //     .skip((validatedQuery.currentPage - 1) * validatedQuery.perPage)
+        //     .take(validatedQuery.perPage)
+        //     .orderBy("tenant.id", "DESC")
+        //     .getManyAndCount();
+        // return result;
     }
 
     // Getting single tenant by id
