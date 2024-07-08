@@ -41,19 +41,35 @@ class UserService {
             throw error;
         }
     }
-
+    async getAll() {
+        return this.userRepository.find({
+            relations: {
+                tenant: true,
+            },
+        });
+    }
     async findByEmail(email: string) {
         return await this.userRepository.findOne({
             where: {
                 email,
             },
-            select: ["id", "email", "firstName", "lastName", "password"],
+            select: [
+                "id",
+                "email",
+                "firstName",
+                "lastName",
+                "password",
+                "role",
+            ],
         });
     }
     async findById(id: number) {
         return await this.userRepository.findOne({
             where: {
                 id,
+            },
+            relations: {
+                tenant: true,
             },
         });
     }
