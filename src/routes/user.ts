@@ -6,6 +6,7 @@ import { UserService } from "../service";
 import { AppDataSource } from "../config/data-source";
 import { User } from "../entity";
 import listUsersValidator from "../validators/list-users-validator";
+import { updateUserValidator } from "../validators";
 
 const router = express.Router();
 
@@ -25,6 +26,7 @@ router.patch(
     "/:id",
     authenticate,
     canAccess([Roles.ADMIN]),
+    updateUserValidator,
     (req: Request, res: Response, next: NextFunction) =>
         userController.update(req, res, next),
 );

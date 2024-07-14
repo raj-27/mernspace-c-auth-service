@@ -2,9 +2,9 @@ import { NextFunction, Request, Response } from "express";
 import { UserService } from "../service";
 import {
     CreateUserRequest,
-    limitedUserData,
+    LimitedUserData,
     UserData,
-    userQueryParams,
+    UserQueryParams,
 } from "../types";
 import { matchedData, validationResult } from "express-validator";
 import createHttpError from "http-errors";
@@ -42,7 +42,7 @@ export default class UserController {
         try {
             const [users, count]: [UserData[], number] =
                 await this.userService.getAll(
-                    validatedQuery as userQueryParams,
+                    validatedQuery as UserQueryParams,
                 );
 
             const response = {
@@ -64,7 +64,7 @@ export default class UserController {
             return res.status(400).json({ errors: result.array() });
         }
         const { firstName, lastName, email, role, tenantId } =
-            req.body as limitedUserData;
+            req.body as LimitedUserData;
         const userId = req.params.id;
         if (isNaN(Number(userId))) {
             return next(createHttpError(400, "Invalid params"));
@@ -75,7 +75,7 @@ export default class UserController {
                 lastName,
                 email,
                 role,
-                tenantId: tenantId,
+                tenantId,
             });
             res.json({ id: Number(userId) });
         } catch (error) {
