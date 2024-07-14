@@ -1,5 +1,5 @@
 import { NextFunction, Response } from "express";
-import { AuthRequst, RegisterUserRequest } from "../types";
+import { AuthRequest, RegisterUserRequest } from "../types";
 import { Logger } from "winston";
 import { JwtPayload } from "jsonwebtoken";
 import { validationResult } from "express-validator";
@@ -154,7 +154,7 @@ class AuthController {
     }
 
     // Logout User
-    async logout(req: AuthRequst, res: Response, next: NextFunction) {
+    async logout(req: AuthRequest, res: Response, next: NextFunction) {
         try {
             await this.tokenService.deleteRefreshToken(Number(req.auth.id));
             this.logger.info("Refresh Token has been deleted!", {
@@ -174,15 +174,15 @@ class AuthController {
     }
 
     // Self
-    async self(req: AuthRequst, res: Response) {
-        const user = await this.userService.findById(req.auth.sub);
+    async self(req: AuthRequest, res: Response) {
+        const user = await this.userService.findById(Number(req.auth.sub));
         res.json({ ...user, password: undefined });
     }
 
     // Refresh
-    async refresh(req: AuthRequst, res: Response, next: NextFunction) {
+    async refresh(req: AuthRequest, res: Response, next: NextFunction) {
         try {
-            const user = await this.userService.findById(req.auth.sub);
+            const user = await this.userService.findById(Number(req.auth.sub));
 
             if (!user) {
                 next(createHttpError(400, "User with token could not find"));

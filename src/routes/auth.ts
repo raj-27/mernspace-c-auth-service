@@ -1,7 +1,6 @@
 import express, { NextFunction, Request, Response } from "express";
 import { AppDataSource } from "../config/data-source";
 import logger from "../config/logger";
-import { AuthRequst } from "../types";
 import {
     authenticate,
     parseRefreshToken,
@@ -11,6 +10,7 @@ import { CredentialService, TokenService, UserService } from "../service";
 import { loginValidator, registerValidator } from "../validators";
 import { AuthController } from "../controllers";
 import { RefreshToken, User } from "../entity";
+import { AuthRequest } from "../types";
 
 const router = express.Router();
 const userRepository = AppDataSource.getRepository(User);
@@ -40,14 +40,14 @@ router.post(
 );
 
 router.get("/self", authenticate, (req: Request, res: Response) =>
-    authController.self(req as AuthRequst, res),
+    authController.self(req as AuthRequest, res),
 );
 
 router.post(
     "/refresh",
     validateRefreshToken,
     (req: Request, res: Response, next: NextFunction) =>
-        authController.refresh(req as AuthRequst, res, next),
+        authController.refresh(req as AuthRequest, res, next),
 );
 
 router.post(
@@ -55,7 +55,7 @@ router.post(
     authenticate,
     parseRefreshToken,
     (req: Request, res: Response, next: NextFunction) =>
-        authController.logout(req as AuthRequst, res, next),
+        authController.logout(req as AuthRequest, res, next),
 );
 
 export default router;

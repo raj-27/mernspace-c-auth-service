@@ -1,10 +1,10 @@
 import { NextFunction, Request, Response } from "express";
-import { AuthRequst } from "../types";
 import createHttpError from "http-errors";
+import { AuthRequest } from "../types";
 
 export default function canAccess(roles: string[]) {
     return (req: Request, res: Response, next: NextFunction) => {
-        const _req = req as AuthRequst;
+        const _req = req as AuthRequest;
         const fromToken = _req.auth.role;
         if (!roles.includes(fromToken)) {
             const error = createHttpError(

@@ -1,6 +1,6 @@
 import { Brackets, Repository } from "typeorm";
 import bcrypt from "bcryptjs";
-import { limitedUserData, UserData, userQueryParams } from "../types";
+import { LimitedUserData, UserData, UserQueryParams } from "../types";
 import createHttpError from "http-errors";
 import { User } from "../entity";
 
@@ -21,6 +21,7 @@ class UserService {
             const error = createHttpError(400, "Email is already eixst");
             throw error;
         }
+
         // Hashed the password
         const saltRounds = 10;
         const hashedPassword = await bcrypt.hash(password, saltRounds);
@@ -31,7 +32,7 @@ class UserService {
                 email,
                 password: hashedPassword,
                 role,
-                tenant: tenantId ? { id: tenantId } : undefined,
+                tenant: tenantId ? { id: tenantId } : null,
             });
         } catch (err) {
             const error = createHttpError(
@@ -41,7 +42,7 @@ class UserService {
             throw error;
         }
     }
-    async getAll(validatedQuery: userQueryParams) {
+    async getAll(validatedQuery: UserQueryParams) {
         const queryBuilder = this.userRepository.createQueryBuilder("user");
         if (validatedQuery.q) {
             const searchTerm = `%${validatedQuery.q}%`;
@@ -72,7 +73,7 @@ class UserService {
     }
     async update(
         userId: number,
-        { firstName, lastName, email, role, tenantId }: limitedUserData,
+        { firstName, lastName, email, role, tenantId }: LimitedUserData,
     ) {
         try {
             return await this.userRepository.update(userId, {
@@ -80,7 +81,7 @@ class UserService {
                 lastName,
                 email,
                 role,
-                tenant: tenantId ? { id: tenantId } : undefined,
+                tenant: tenantId ? { id: tenantId } : null,
             });
         } catch (error) {
             const err = createHttpError(

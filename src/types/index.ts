@@ -1,35 +1,35 @@
 import { Request } from "express";
 
-export interface limitedUserData {
+export interface UserData {
     firstName: string;
     lastName: string;
-    role: string;
     email: string;
-    tenantId?: number;
-}
-
-export interface UserData extends limitedUserData {
     password: string;
+    role: string;
     tenantId?: number;
 }
 export interface RegisterUserRequest extends Request {
     body: UserData;
 }
 
-export interface AuthRequst extends Request {
+export interface AuthRequest extends Request {
     auth: {
-        sub: number;
+        sub: string;
         role: string;
         id?: string;
+        tenant: string;
+        firstName: string;
+        lastName: string;
+        email: string;
     };
 }
 
-export interface AuthCookie {
+export type AuthCookie = {
     accessToken: string;
     refreshToken: string;
-}
+};
 
-export interface iRefreshTokenPayload {
+export interface IRefreshTokenPayload {
     id: string;
 }
 
@@ -42,16 +42,31 @@ export interface CreateTenantRequest extends Request {
     body: ITenant;
 }
 
-export interface TenantQueryParams {
-    q: string;
-    perPage: number;
-    currentPage: number;
-}
-
 export interface CreateUserRequest extends Request {
     body: UserData;
 }
 
-export interface userQueryParams extends TenantQueryParams {
+export interface LimitedUserData {
+    firstName: string;
+    lastName: string;
     role: string;
+    email: string;
+    tenantId: number;
+}
+
+export interface UpdateUserRequest extends Request {
+    body: LimitedUserData;
+}
+
+export interface UserQueryParams {
+    perPage: number;
+    currentPage: number;
+    q: string;
+    role: string;
+}
+
+export interface TenantQueryParams {
+    q: string;
+    perPage: number;
+    currentPage: number;
 }
