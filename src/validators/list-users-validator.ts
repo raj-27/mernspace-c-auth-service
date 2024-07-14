@@ -1,35 +1,19 @@
 import { checkSchema } from "express-validator";
+import {
+    currentPageSanitize,
+    perPageSanitize,
+    qSanitize,
+} from "../../tests/utils";
 
 export default checkSchema(
     {
-        q: {
-            trim: true,
-            customSanitizer: {
-                options: (value: string) => {
-                    return value ? value : "";
-                },
-            },
-        },
+        q: qSanitize(),
+        currentPage: currentPageSanitize(),
+        perPage: perPageSanitize(),
         role: {
             customSanitizer: {
                 options: (value: string) => {
                     return value ? value : "";
-                },
-            },
-        },
-        currentPage: {
-            customSanitizer: {
-                options: (value: string) => {
-                    const parsedValue = Number(value);
-                    return Number.isNaN(parsedValue) ? 1 : parsedValue;
-                },
-            },
-        },
-        perPage: {
-            customSanitizer: {
-                options: (value: string) => {
-                    const parsedValue = Number(value);
-                    return Number.isNaN(parsedValue) ? 5 : parsedValue;
                 },
             },
         },

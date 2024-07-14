@@ -1,7 +1,7 @@
 import { NextFunction, Response } from "express";
 import createHttpError from "http-errors";
 import { TenantService } from "../service";
-import { CreateTenantRequest, tenantQueryParams } from "../types";
+import { CreateTenantRequest, TenantQueryParams } from "../types";
 import { Logger } from "winston";
 import { Request } from "express-jwt";
 import { matchedData, validationResult } from "express-validator";
@@ -62,7 +62,7 @@ export default class TenantController {
         }
         const validatedQuery = matchedData(req, {
             locations: ["query"],
-        }) as tenantQueryParams;
+        }) as TenantQueryParams;
         try {
             const [tenants, count] =
                 await this.tenantService.getAll(validatedQuery);

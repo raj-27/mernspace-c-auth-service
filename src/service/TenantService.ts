@@ -1,6 +1,6 @@
 import { Repository } from "typeorm";
 import { Tenant } from "../entity";
-import { ITenant, tenantQueryParams } from "../types";
+import { ITenant, TenantQueryParams } from "../types";
 
 export default class TenantService {
     constructor(private tenantRepository: Repository<Tenant>) {}
@@ -13,7 +13,7 @@ export default class TenantService {
     }
 
     // Getting List of Tenant
-    async getAll(validatedQuery: tenantQueryParams) {
+    async getAll(validatedQuery: TenantQueryParams) {
         const queryBuilder = this.tenantRepository.createQueryBuilder("tenant");
         if (validatedQuery.q) {
             const searchTerm = `%${validatedQuery.q}%`;

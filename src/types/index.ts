@@ -1,11 +1,15 @@
 import { Request } from "express";
 
-export interface UserData {
+export interface limitedUserData {
     firstName: string;
     lastName: string;
-    email: string;
-    password: string;
     role: string;
+    email: string;
+    tenantId?: number;
+}
+
+export interface UserData extends limitedUserData {
+    password: string;
     tenantId?: number;
 }
 export interface RegisterUserRequest extends Request {
@@ -48,23 +52,6 @@ export interface CreateUserRequest extends Request {
     body: UserData;
 }
 
-export interface userQueryParams {
-    perPage: number;
-    currentPage: number;
-    q: string;
+export interface userQueryParams extends TenantQueryParams {
     role: string;
-}
-
-export interface tenantQueryParams {
-    perPage: number;
-    currentPage: number;
-    q: string;
-}
-
-export interface limitedUserData {
-    firstName: string;
-    lastName: string;
-    role: string;
-    email: string;
-    tenantId: number | null | undefined;
 }
