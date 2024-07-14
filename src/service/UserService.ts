@@ -1,6 +1,6 @@
-import { Repository } from "typeorm";
+import { Brackets, Repository } from "typeorm";
 import bcrypt from "bcryptjs";
-import { UserData } from "../types";
+import { limitedUserData, UserData, userQueryParams } from "../types";
 import createHttpError from "http-errors";
 import { User } from "../entity";
 
@@ -41,13 +41,56 @@ class UserService {
             throw error;
         }
     }
-    async getAll() {
-        return this.userRepository.find({
-            relations: {
-                tenant: true,
-            },
-        });
+    async getAll(validatedQuery: userQueryParams) {
+        const queryBuilder = this.userRepository.createQueryBuilder("user");
+        if (validatedQuery.q) {
+            const searchTerm = `%${validatedQuery.q}%`;
+            queryBuilder.where(
+                new Brackets((qb) => {
+                    qb.where(
+                        // "CONCAT(user.firstName,' ',user.lastName) ILike :q",
+                        "user.firstName ILike :q",
+                        { q: searchTerm },
+                    ).orWhere("user.email ILike :q", { q: searchTerm });
+                }),
+            );
+        }
+
+        if (validatedQuery.role) {
+            queryBuilder.andWhere("user.role = :role", {
+                role: validatedQuery.role,
+            });
+        }
+
+        const result = await queryBuilder
+            .leftJoinAndSelect("user.tenant", "tenant")
+            .skip((validatedQuery.currentPage - 1) * validatedQuery.perPage)
+            .take(validatedQuery.perPage)
+            .orderBy("user.id", "DESC")
+            .getManyAndCount();
+        return result;
     }
+    async update(
+        userId: number,
+        { firstName, lastName, email, role, tenantId }: limitedUserData,
+    ) {
+        try {
+            return await this.userRepository.update(userId, {
+                firstName,
+                lastName,
+                email,
+                role,
+                tenant: tenantId ? { id: tenantId } : undefined,
+            });
+        } catch (error) {
+            const err = createHttpError(
+                400,
+                "Failed to update user in the database",
+            );
+            throw err;
+        }
+    }
+
     async findByEmail(email: string) {
         return await this.userRepository.findOne({
             where: {
