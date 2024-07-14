@@ -47,3 +47,24 @@ export interface TenantQueryParams {
 export interface CreateUserRequest extends Request {
     body: UserData;
 }
+
+export interface userQueryParams {
+    perPage: number;
+    currentPage: number;
+    q: string;
+    role: string;
+}
+
+export interface tenantQueryParams {
+    perPage: number;
+    currentPage: number;
+    q: string;
+}
+
+export interface limitedUserData {
+    firstName: string;
+    lastName: string;
+    role: string;
+    email: string;
+    tenantId: number | null | undefined;
+}
