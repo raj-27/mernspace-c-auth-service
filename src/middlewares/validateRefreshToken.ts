@@ -1,7 +1,7 @@
 import { expressjwt } from "express-jwt";
 import { Config } from "../config";
 import { Request } from "express";
-import { AuthCookie, iRefreshTokenPayload } from "../types";
+import { AuthCookie, IRefreshTokenPayload } from "../types";
 import { AppDataSource } from "../config/data-source";
 import logger from "../config/logger";
 import { RefreshToken } from "../entity";
@@ -18,14 +18,14 @@ export default expressjwt({
             const refreshTokenRepo = AppDataSource.getRepository(RefreshToken);
             const refreshToken = await refreshTokenRepo.findOne({
                 where: {
-                    id: Number((token?.payload as iRefreshTokenPayload).id),
+                    id: Number((token?.payload as IRefreshTokenPayload).id),
                     user: { id: Number(token?.payload.sub) },
                 },
             });
             return refreshToken === null;
         } catch (err) {
             logger.error("Error while getting the refresh token", {
-                id: (token?.payload as iRefreshTokenPayload).id,
+                id: (token?.payload as IRefreshTokenPayload).id,
             });
         }
         return true;
