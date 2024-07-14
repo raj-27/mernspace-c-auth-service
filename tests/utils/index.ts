@@ -35,3 +35,36 @@ export const createTenant = async (respository: Repository<Tenant>) => {
     });
     return tenant;
 };
+
+export const qSanitize = () => {
+    return {
+        trim: true,
+        customSanitizer: {
+            options: (value: string) => {
+                return value ? value : "";
+            },
+        },
+    };
+};
+
+export const currentPageSanitize = () => {
+    return {
+        customSanitizer: {
+            options: (value: string) => {
+                const parsedValue = Number(value);
+                return Number.isNaN(parsedValue) ? 1 : parsedValue;
+            },
+        },
+    };
+};
+
+export const perPageSanitize = () => {
+    return {
+        customSanitizer: {
+            options: (value: string) => {
+                const parsedValue = Number(value);
+                return Number.isNaN(parsedValue) ? 5 : parsedValue;
+            },
+        },
+    };
+};

@@ -1,6 +1,6 @@
 import { Repository } from "typeorm";
 import { Tenant } from "../entity";
-import { ITenant } from "../types";
+import { ITenant, TenantQueryParams } from "../types";
 
 export default class TenantService {
     constructor(private tenantRepository: Repository<Tenant>) {}
@@ -13,8 +13,20 @@ export default class TenantService {
     }
 
     // Getting List of Tenant
-    async getAll() {
-        return await this.tenantRepository.find();
+    async getAll(validatedQuery: TenantQueryParams) {
+        const queryBuilder = this.tenantRepository.createQueryBuilder("tenant");
+        if (validatedQuery.q) {
+            const searchTerm = `%${validatedQuery.q}%`;
+            queryBuilder
+                .where("tenant.name ILike :q", { q: searchTerm })
+                .orWhere("tenant.address ILike :q", { q: searchTerm });
+        }
+        const result = queryBuilder
+            .skip((validatedQuery.currentPage - 1) * validatedQuery.perPage)
+            .take(validatedQuery.perPage)
+            .orderBy("tenant.id", "DESC")
+            .getManyAndCount();
+        return result;
     }
 
     // Getting single tenant by id

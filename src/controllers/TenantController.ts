@@ -1,10 +1,10 @@
 import { NextFunction, Response } from "express";
 import createHttpError from "http-errors";
 import { TenantService } from "../service";
-import { CreateTenantRequest } from "../types";
+import { CreateTenantRequest, TenantQueryParams } from "../types";
 import { Logger } from "winston";
 import { Request } from "express-jwt";
-import { validationResult } from "express-validator";
+import { matchedData, validationResult } from "express-validator";
 
 export default class TenantController {
     constructor(
@@ -60,9 +60,18 @@ export default class TenantController {
         if (!result.isEmpty()) {
             return res.status(400).json({ errors: result.array() });
         }
+        const validatedQuery = matchedData(req, {
+            locations: ["query"],
+        }) as TenantQueryParams;
         try {
-            const tenants = await this.tenantService.getAll();
-            res.json(tenants);
+            const [tenants, count] =
+                await this.tenantService.getAll(validatedQuery);
+            res.json({
+                currentPage: validatedQuery.currentPage,
+                perPage: validatedQuery.perPage,
+                data: tenants,
+                count,
+            });
         } catch (error) {
             return next(
                 createHttpError(400, "Error while getting tenant list"),

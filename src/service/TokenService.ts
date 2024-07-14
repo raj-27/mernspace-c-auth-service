@@ -34,7 +34,7 @@ class TokenService {
         try {
             const accessToken = sign(payload, privateKey, {
                 algorithm: "RS256",
-                expiresIn: "1m",
+                expiresIn: "1h",
                 issuer: "auth-service",
             });
             return accessToken;

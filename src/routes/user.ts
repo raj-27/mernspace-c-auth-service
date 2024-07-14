@@ -5,6 +5,7 @@ import { Roles } from "../constants";
 import { UserService } from "../service";
 import { AppDataSource } from "../config/data-source";
 import { User } from "../entity";
+import listUsersValidator from "../validators/list-users-validator";
 
 const router = express.Router();
 
@@ -20,10 +21,19 @@ router.post(
         userController.create(req, res, next),
 );
 
+router.patch(
+    "/:id",
+    authenticate,
+    canAccess([Roles.ADMIN]),
+    (req: Request, res: Response, next: NextFunction) =>
+        userController.update(req, res, next),
+);
+
 router.get(
     "/",
     authenticate,
     canAccess([Roles.ADMIN]),
+    listUsersValidator,
     (req: Request, res: Response, next: NextFunction) =>
         userController.getAll(req, res, next),
 );
