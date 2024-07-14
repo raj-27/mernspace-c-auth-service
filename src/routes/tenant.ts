@@ -10,7 +10,7 @@ import { AppDataSource } from "../config/data-source";
 import { Tenant } from "../entity";
 import { authenticate, canAccess } from "../middlewares";
 import { Roles } from "../constants";
-import { tenantValidator } from "../validators";
+import { listTenantValidator, tenantValidator } from "../validators";
 import { CreateTenantRequest } from "../types";
 import logger from "../config/logger";
 
@@ -40,6 +40,7 @@ router.get(
     "/",
     authenticate,
     canAccess([Roles.ADMIN]),
+    listTenantValidator,
     (req: Request, res: Response, next: NextFunction) =>
         tenantController.getAll(req, res, next),
 );
