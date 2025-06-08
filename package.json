@@ -4,7 +4,8 @@
     "description": "A user management service ",
     "main": "index.js",
     "scripts": {
-        "dev": "cross-env NODE_ENV=dev node src/server.ts",
+        "dev": "cross-env NODE_ENV=dev nodemon src/server.ts",
+        "prod": "cross-env NODE_ENV=prod node src/server.js",
         "build": "tsc",
         "format:check": "prettier . --check",
         "format:fix": "prettier . --write",
