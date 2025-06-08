@@ -8,9 +8,8 @@ const startServer = async () => {
         await AppDataSource.initialize().then(() =>
             logger.info("Database Conneced Successfuly!"),
         );
-        app.listen(Config.PORT, () =>
-            logger.info(`listening on port ${Config.PORT}`),
-        );
+        const port = Config.DB_PORT || 5501;
+        app.listen(port, () => logger.info(`listening on port ${port}`));
     } catch (err) {
         if (err instanceof Error) {
             logger.error(err?.message);
