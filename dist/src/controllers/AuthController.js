@@ -1,16 +1,44 @@
 "use strict";
-var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
-};
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
+var __awaiter =
+    (this && this.__awaiter) ||
+    function (thisArg, _arguments, P, generator) {
+        function adopt(value) {
+            return value instanceof P
+                ? value
+                : new P(function (resolve) {
+                      resolve(value);
+                  });
+        }
+        return new (P || (P = Promise))(function (resolve, reject) {
+            function fulfilled(value) {
+                try {
+                    step(generator.next(value));
+                } catch (e) {
+                    reject(e);
+                }
+            }
+            function rejected(value) {
+                try {
+                    step(generator["throw"](value));
+                } catch (e) {
+                    reject(e);
+                }
+            }
+            function step(result) {
+                result.done
+                    ? resolve(result.value)
+                    : adopt(result.value).then(fulfilled, rejected);
+            }
+            step(
+                (generator = generator.apply(thisArg, _arguments || [])).next(),
+            );
+        });
+    };
+var __importDefault =
+    (this && this.__importDefault) ||
+    function (mod) {
+        return mod && mod.__esModule ? mod : { default: mod };
+    };
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_validator_1 = require("express-validator");
 const http_errors_1 = __importDefault(require("http-errors"));
@@ -49,9 +77,15 @@ class AuthController {
                     sub: String(user.id),
                     role: user.role,
                 };
-                const accessToken = this.tokenService.generateAccessToken(payload);
-                const newRefreshToken = yield this.tokenService.persistRefreshToken(user);
-                const refreshToken = this.tokenService.generateRefreshToken(Object.assign(Object.assign({}, payload), { id: String(newRefreshToken.id) }));
+                const accessToken =
+                    this.tokenService.generateAccessToken(payload);
+                const newRefreshToken =
+                    yield this.tokenService.persistRefreshToken(user);
+                const refreshToken = this.tokenService.generateRefreshToken(
+                    Object.assign(Object.assign({}, payload), {
+                        id: String(newRefreshToken.id),
+                    }),
+                );
                 res.cookie("accessToken", accessToken, {
                     domain: "localhost",
                     sameSite: "strict",
@@ -67,8 +101,7 @@ class AuthController {
                 res.status(201).json({
                     id: user.id,
                 });
-            }
-            catch (error) {
+            } catch (error) {
                 next(error);
             }
         });
@@ -91,15 +124,25 @@ class AuthController {
                 // Check if user exist in database or not
                 const user = yield this.userService.findByEmail(email);
                 if (!user) {
-                    const error = (0, http_errors_1.default)(400, "Email or passord is incorrect!");
+                    const error = (0, http_errors_1.default)(
+                        400,
+                        "Email or passord is incorrect!",
+                    );
                     next(error);
                     return;
                 }
                 this.logger.info("User has been logged in", { id: user.id });
                 // Compare password
-                const isPasswordMatch = yield this.CredentialService.comparePassword(password, user.password);
+                const isPasswordMatch =
+                    yield this.CredentialService.comparePassword(
+                        password,
+                        user.password,
+                    );
                 if (!isPasswordMatch) {
-                    const error = (0, http_errors_1.default)(400, "Email or password is incorrect");
+                    const error = (0, http_errors_1.default)(
+                        400,
+                        "Email or password is incorrect",
+                    );
                     next(error);
                     return;
                 }
@@ -107,9 +150,15 @@ class AuthController {
                     sub: String(user.id),
                     role: user.role,
                 };
-                const accessToken = this.tokenService.generateAccessToken(payload);
-                const newRefreshToken = yield this.tokenService.persistRefreshToken(user);
-                const refreshToken = this.tokenService.generateRefreshToken(Object.assign(Object.assign({}, payload), { id: String(newRefreshToken.id) }));
+                const accessToken =
+                    this.tokenService.generateAccessToken(payload);
+                const newRefreshToken =
+                    yield this.tokenService.persistRefreshToken(user);
+                const refreshToken = this.tokenService.generateRefreshToken(
+                    Object.assign(Object.assign({}, payload), {
+                        id: String(newRefreshToken.id),
+                    }),
+                );
                 res.cookie("accessToken", accessToken, {
                     domain: "localhost",
                     sameSite: "strict",
@@ -125,8 +174,7 @@ class AuthController {
                 res.json({
                     id: user.id,
                 });
-            }
-            catch (error) {
+            } catch (error) {
                 next(error);
             }
         });
@@ -147,9 +195,13 @@ class AuthController {
                 res.json({
                     messgae: "User has been loged out!",
                 });
-            }
-            catch (error) {
-                return next((0, http_errors_1.default)(400, "Error While Logoging out!"));
+            } catch (error) {
+                return next(
+                    (0, http_errors_1.default)(
+                        400,
+                        "Error While Logoging out!",
+                    ),
+                );
             }
         });
     }
@@ -157,27 +209,42 @@ class AuthController {
     self(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             const user = yield this.userService.findById(Number(req.auth.sub));
-            res.json(Object.assign(Object.assign({}, user), { password: undefined }));
+            res.json(
+                Object.assign(Object.assign({}, user), { password: undefined }),
+            );
         });
     }
     // Refresh
     refresh(req, res, next) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                const user = yield this.userService.findById(Number(req.auth.sub));
+                const user = yield this.userService.findById(
+                    Number(req.auth.sub),
+                );
                 if (!user) {
-                    next((0, http_errors_1.default)(400, "User with token could not find"));
+                    next(
+                        (0, http_errors_1.default)(
+                            400,
+                            "User with token could not find",
+                        ),
+                    );
                     return;
                 }
                 const payload = {
                     sub: String(req.auth.sub),
                     role: req.auth.role,
                 };
-                const accessToken = this.tokenService.generateAccessToken(payload);
-                const newRefreshToken = yield this.tokenService.persistRefreshToken(user);
+                const accessToken =
+                    this.tokenService.generateAccessToken(payload);
+                const newRefreshToken =
+                    yield this.tokenService.persistRefreshToken(user);
                 // Deleting Old Refresh Token
                 yield this.tokenService.deleteRefreshToken(Number(req.auth.id));
-                const refreshToken = this.tokenService.generateRefreshToken(Object.assign(Object.assign({}, payload), { id: String(newRefreshToken.id) }));
+                const refreshToken = this.tokenService.generateRefreshToken(
+                    Object.assign(Object.assign({}, payload), {
+                        id: String(newRefreshToken.id),
+                    }),
+                );
                 res.cookie("accessToken", accessToken, {
                     domain: "localhost",
                     sameSite: "strict",
@@ -193,9 +260,13 @@ class AuthController {
                 res.json({
                     id: user.id,
                 });
-            }
-            catch (error) {
-                next((0, http_errors_1.default)(400, "Error While Refreshing Refresh Token"));
+            } catch (error) {
+                next(
+                    (0, http_errors_1.default)(
+                        400,
+                        "Error While Refreshing Refresh Token",
+                    ),
+                );
             }
         });
     }

@@ -1,14 +1,20 @@
 "use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
+var __importDefault =
+    (this && this.__importDefault) ||
+    function (mod) {
+        return mod && mod.__esModule ? mod : { default: mod };
+    };
 Object.defineProperty(exports, "__esModule", { value: true });
 const logger_1 = __importDefault(require("../config/logger"));
-const globalErrorHandler = (err, req, res, 
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-ignore
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-next) => {
+const globalErrorHandler = (
+    err,
+    req,
+    res,
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    next,
+) => {
     const statusCode = err.status || 500;
     const isProduction = process.env.NODE_ENV === "production";
     let message = "Internal server error";

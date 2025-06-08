@@ -1,16 +1,44 @@
 "use strict";
-var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
-};
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
+var __awaiter =
+    (this && this.__awaiter) ||
+    function (thisArg, _arguments, P, generator) {
+        function adopt(value) {
+            return value instanceof P
+                ? value
+                : new P(function (resolve) {
+                      resolve(value);
+                  });
+        }
+        return new (P || (P = Promise))(function (resolve, reject) {
+            function fulfilled(value) {
+                try {
+                    step(generator.next(value));
+                } catch (e) {
+                    reject(e);
+                }
+            }
+            function rejected(value) {
+                try {
+                    step(generator["throw"](value));
+                } catch (e) {
+                    reject(e);
+                }
+            }
+            function step(result) {
+                result.done
+                    ? resolve(result.value)
+                    : adopt(result.value).then(fulfilled, rejected);
+            }
+            step(
+                (generator = generator.apply(thisArg, _arguments || [])).next(),
+            );
+        });
+    };
+var __importDefault =
+    (this && this.__importDefault) ||
+    function (mod) {
+        return mod && mod.__esModule ? mod : { default: mod };
+    };
 Object.defineProperty(exports, "__esModule", { value: true });
 const http_errors_1 = __importDefault(require("http-errors"));
 const express_validator_1 = require("express-validator");
@@ -24,12 +52,21 @@ class TenantController {
         return __awaiter(this, void 0, void 0, function* () {
             const { name, address } = req.body;
             try {
-                const tenant = yield this.tenantService.create({ name, address });
-                this.logger.info(`Tenant created successfully tenant id ${tenant.id}`);
+                const tenant = yield this.tenantService.create({
+                    name,
+                    address,
+                });
+                this.logger.info(
+                    `Tenant created successfully tenant id ${tenant.id}`,
+                );
                 res.status(201).json({ id: tenant.id });
-            }
-            catch (error) {
-                next((0, http_errors_1.default)(400, "Error while creating tenant"));
+            } catch (error) {
+                next(
+                    (0, http_errors_1.default)(
+                        400,
+                        "Error while creating tenant",
+                    ),
+                );
                 return;
             }
         });
@@ -47,7 +84,9 @@ class TenantController {
                 next((0, http_errors_1.default)(400, "Invalid url params"));
                 return;
             }
-            this.logger.info(`Request for updating a tenant and id: ${tenantId}`);
+            this.logger.info(
+                `Request for updating a tenant and id: ${tenantId}`,
+            );
             try {
                 yield this.tenantService.update(Number(tenantId), {
                     name,
@@ -55,9 +94,13 @@ class TenantController {
                 });
                 this.logger.info(`Tenant is successfuly and id : ${tenantId}`);
                 res.json({ id: Number(tenantId) });
-            }
-            catch (error) {
-                next((0, http_errors_1.default)(400, "Error while updating tenant"));
+            } catch (error) {
+                next(
+                    (0, http_errors_1.default)(
+                        400,
+                        "Error while updating tenant",
+                    ),
+                );
                 return;
             }
         });
@@ -73,16 +116,21 @@ class TenantController {
                 locations: ["query"],
             });
             try {
-                const [tenants, count] = yield this.tenantService.getAll(validatedQuery);
+                const [tenants, count] =
+                    yield this.tenantService.getAll(validatedQuery);
                 res.json({
                     currentPage: validatedQuery.currentPage,
                     perPage: validatedQuery.perPage,
                     data: tenants,
                     count,
                 });
-            }
-            catch (error) {
-                return next((0, http_errors_1.default)(400, "Error while getting tenant list"));
+            } catch (error) {
+                return next(
+                    (0, http_errors_1.default)(
+                        400,
+                        "Error while getting tenant list",
+                    ),
+                );
             }
         });
     }
@@ -95,20 +143,30 @@ class TenantController {
             }
             const tenantId = req.params.id;
             if (isNaN(Number(tenantId))) {
-                next((0, http_errors_1.default)(400, "Invalid url parameters!"));
+                next(
+                    (0, http_errors_1.default)(400, "Invalid url parameters!"),
+                );
                 return;
             }
-            this.logger.info(`Request for getting single tenant,Id:${tenantId}`);
+            this.logger.info(
+                `Request for getting single tenant,Id:${tenantId}`,
+            );
             try {
-                const tenant = yield this.tenantService.getOne(Number(tenantId));
+                const tenant = yield this.tenantService.getOne(
+                    Number(tenantId),
+                );
                 if (!tenant) {
-                    next((0, http_errors_1.default)(400, "Tenant does not exist."));
+                    next(
+                        (0, http_errors_1.default)(
+                            400,
+                            "Tenant does not exist.",
+                        ),
+                    );
                     return;
                 }
                 this.logger.info(`successfully get tenant,Id:${tenantId}`);
                 res.json(tenant);
-            }
-            catch (error) {
+            } catch (error) {
                 next(error);
                 return;
             }
@@ -123,15 +181,16 @@ class TenantController {
             }
             const tenantId = req.params.id;
             if (isNaN(Number(tenantId))) {
-                next((0, http_errors_1.default)(400, "Inavalid url paramater."));
+                next(
+                    (0, http_errors_1.default)(400, "Inavalid url paramater."),
+                );
                 return;
             }
             try {
                 yield this.tenantService.deleteById(Number(tenantId));
                 this.logger.info(`Tenant has been deleted,Id:${tenantId}`);
                 res.json({ id: Number(tenantId) });
-            }
-            catch (error) {
+            } catch (error) {
                 next(error);
             }
         });

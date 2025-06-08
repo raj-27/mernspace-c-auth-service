@@ -1,16 +1,44 @@
 "use strict";
-var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
-};
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
+var __awaiter =
+    (this && this.__awaiter) ||
+    function (thisArg, _arguments, P, generator) {
+        function adopt(value) {
+            return value instanceof P
+                ? value
+                : new P(function (resolve) {
+                      resolve(value);
+                  });
+        }
+        return new (P || (P = Promise))(function (resolve, reject) {
+            function fulfilled(value) {
+                try {
+                    step(generator.next(value));
+                } catch (e) {
+                    reject(e);
+                }
+            }
+            function rejected(value) {
+                try {
+                    step(generator["throw"](value));
+                } catch (e) {
+                    reject(e);
+                }
+            }
+            function step(result) {
+                result.done
+                    ? resolve(result.value)
+                    : adopt(result.value).then(fulfilled, rejected);
+            }
+            step(
+                (generator = generator.apply(thisArg, _arguments || [])).next(),
+            );
+        });
+    };
+var __importDefault =
+    (this && this.__importDefault) ||
+    function (mod) {
+        return mod && mod.__esModule ? mod : { default: mod };
+    };
 Object.defineProperty(exports, "__esModule", { value: true });
 const jsonwebtoken_1 = require("jsonwebtoken");
 const http_errors_1 = __importDefault(require("http-errors"));
@@ -33,10 +61,14 @@ class TokenService {
     generateAccessToken(payload) {
         let privateKey;
         try {
-            privateKey = node_fs_1.default.readFileSync(node_path_1.default.join(__dirname, "../../certs/private.pem"));
-        }
-        catch (err) {
-            const error = (0, http_errors_1.default)(500, "Error while reading private key");
+            privateKey = node_fs_1.default.readFileSync(
+                node_path_1.default.join(__dirname, "../../certs/private.pem"),
+            );
+        } catch (err) {
+            const error = (0, http_errors_1.default)(
+                500,
+                "Error while reading private key",
+            );
             throw error;
         }
         try {
@@ -46,9 +78,11 @@ class TokenService {
                 issuer: "auth-service",
             });
             return accessToken;
-        }
-        catch (error) {
-            const err = (0, http_errors_1.default)(400, "Error While Generating Access Token");
+        } catch (error) {
+            const err = (0, http_errors_1.default)(
+                400,
+                "Error While Generating Access Token",
+            );
             throw err;
         }
     }
@@ -65,16 +99,22 @@ class TokenService {
      */
     generateRefreshToken(payload) {
         try {
-            const refreshToken = (0, jsonwebtoken_1.sign)(payload, config_1.Config.REFRESH_TOKEN_SECRET, {
-                algorithm: "HS256",
-                expiresIn: "1y",
-                issuer: "auth-service",
-                jwtid: payload.id,
-            });
+            const refreshToken = (0, jsonwebtoken_1.sign)(
+                payload,
+                config_1.Config.REFRESH_TOKEN_SECRET,
+                {
+                    algorithm: "HS256",
+                    expiresIn: "1y",
+                    issuer: "auth-service",
+                    jwtid: payload.id,
+                },
+            );
             return refreshToken;
-        }
-        catch (error) {
-            const err = (0, http_errors_1.default)(500, "Error while generating refresh token");
+        } catch (error) {
+            const err = (0, http_errors_1.default)(
+                500,
+                "Error while generating refresh token",
+            );
             throw err;
         }
     }
