@@ -8,7 +8,7 @@ const startServer = async () => {
         await AppDataSource.initialize().then(() =>
             logger.info("Database Conneced Successfuly!"),
         );
-        app.listen(Config.PORT, () =>
+        app.listen(Config.PORT || process.env.PORT, () =>
             logger.info(`listening on port ${Config.PORT}`),
         );
     } catch (err) {
