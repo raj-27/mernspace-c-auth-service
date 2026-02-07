@@ -45,6 +45,9 @@ class AuthController {
             const payload: JwtPayload = {
                 sub: String(user.id),
                 role: user.role,
+                firstName,
+                lastName,
+                email,
             };
 
             const accessToken = this.tokenService.generateAccessToken(payload);
@@ -121,6 +124,9 @@ class AuthController {
             const payload: JwtPayload = {
                 sub: String(user.id),
                 role: user.role,
+                firstName: user.firstName,
+                lastName: user.lastName,
+                email: user.email,
             };
 
             const accessToken = this.tokenService.generateAccessToken(payload);
@@ -174,9 +180,26 @@ class AuthController {
     }
 
     // Self
-    async self(req: AuthRequest, res: Response) {
-        const user = await this.userService.findById(Number(req.auth.sub));
-        res.json({ ...user, password: undefined });
+    async self(req: AuthRequest, res: Response, next: NextFunction) {
+        this.logger.info("Enter self method");
+        try {
+            const user = await this.userService.findById(Number(req.auth.sub));
+
+            if (!user) {
+                const error = createHttpError(
+                    404,
+                    "User not found for the given token",
+                );
+                return next(error);
+            }
+            res.json({ ...user, password: undefined });
+        } catch (error) {
+            const errorMessage = createHttpError(
+                500,
+                "Failed to fetch user details for the current session",
+            );
+            next(errorMessage);
+        }
     }
 
     // Refresh

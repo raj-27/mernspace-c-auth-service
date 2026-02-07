@@ -6,6 +6,7 @@ import tenantRouter from "./routes/tenant";
 import userRouter from "./routes/user";
 import cookieParser from "cookie-parser";
 import { globalErrorHandler } from "./middlewares";
+import { Config } from "./config/index";
 
 const app = express();
 app.use(express.static("public"));
@@ -13,7 +14,7 @@ app.use(express.json());
 app.use(cookieParser());
 app.use(
     cors({
-        origin: ["http://localhost:5173"],
+        origin: [Config.ADMIN_URI!],
         methods: ["GET", "POST", "DELETE", "PUT", "PATCH"],
         credentials: true,
     }),

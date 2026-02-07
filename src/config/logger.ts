@@ -8,6 +8,7 @@ const logger = winston.createLogger({
     },
     format: winston.format.combine(
         winston.format.timestamp(),
+        winston.format.errors({ stack: true }), // 🔥 IMPORTANT
         winston.format.json(),
     ),
     transports: [

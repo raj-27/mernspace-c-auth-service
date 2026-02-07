@@ -6,6 +6,8 @@ import { AppDataSource } from "../config/data-source";
 import logger from "../config/logger";
 import { RefreshToken } from "../entity";
 
+console.log(Config.REFRESH_TOKEN_SECRET);
+
 export default expressjwt({
     secret: Config.REFRESH_TOKEN_SECRET!,
     algorithms: ["HS256"],

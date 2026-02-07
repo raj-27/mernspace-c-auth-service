@@ -39,7 +39,6 @@ router.patch(
 router.get(
     "/",
     authenticate,
-    canAccess([Roles.ADMIN]),
     listTenantValidator,
     (req: Request, res: Response, next: NextFunction) =>
         tenantController.getAll(req, res, next),

@@ -4,6 +4,8 @@ import jwksClient from "jwks-rsa";
 import { Config } from "../config";
 import { AuthCookie } from "../types";
 
+console.log(Config.JWKS_URI);
+
 export default expressjwt({
     secret: jwksClient.expressJwtSecret({
         jwksUri: Config.JWKS_URI!,
@@ -13,8 +15,6 @@ export default expressjwt({
     algorithms: ["RS256"],
     getToken(req: Request) {
         const authHeader = req.headers.authorization;
-
-        // Bearer eyjllsdjfljlasdjfljlsadjfljlsdf
         if (authHeader && authHeader.split(" ")[1] !== "undefined") {
             const token = authHeader.split(" ")[1];
             if (token) {
