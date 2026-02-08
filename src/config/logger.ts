@@ -1,6 +1,18 @@
 import winston from "winston";
 import { Config } from ".";
 
+const logFormat = winston.format.printf(
+    ({ level, message, timestamp, stack, serviceName }) => {
+        return JSON.stringify({
+            level,
+            message,
+            stack, // 🔥 THIS IS IMPORTANT
+            serviceName,
+            timestamp,
+        });
+    },
+);
+
 const logger = winston.createLogger({
     level: "info",
     defaultMeta: {
@@ -8,8 +20,8 @@ const logger = winston.createLogger({
     },
     format: winston.format.combine(
         winston.format.timestamp(),
-        winston.format.errors({ stack: true }), // 🔥 IMPORTANT
-        winston.format.json(),
+        winston.format.errors({ stack: true }), // already correct
+        logFormat, // 🔥 ADD THIS
     ),
     transports: [
         new winston.transports.File({
