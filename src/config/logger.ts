@@ -2,13 +2,14 @@ import winston from "winston";
 import { Config } from ".";
 
 const logFormat = winston.format.printf(
-    ({ level, message, timestamp, stack, serviceName }) => {
+    ({ level, message, timestamp, stack, serviceName, ...meta }) => {
         return JSON.stringify({
             level,
             message,
-            stack, // 🔥 THIS IS IMPORTANT
+            stack,
             serviceName,
             timestamp,
+            ...meta,
         });
     },
 );
