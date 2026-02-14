@@ -5,6 +5,10 @@ import { Config } from "../config";
 import { AuthCookie } from "../types";
 import logger from "../config/logger";
 
+logger.debug("JWT middleware triggered", {
+    jwksUri: Config.JWKS_URI!,
+});
+
 export default expressjwt({
     secret: jwksClient.expressJwtSecret({
         jwksUri: Config.JWKS_URI!,
