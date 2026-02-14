@@ -37,8 +37,6 @@ class TokenService {
                 expiresIn: "1h",
                 issuer: "auth-service",
             });
-            console.log("Access Token: ", accessToken);
-
             return accessToken;
         } catch (error) {
             const err = createHttpError(
