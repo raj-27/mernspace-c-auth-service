@@ -19,6 +19,7 @@ export default expressjwt({
             logger.debug("JWT middleware triggered", {
                 path: req.originalUrl,
                 method: req.method,
+                jwksUri: Config.JWKS_URI!,
             });
 
             const authHeader = req.headers.authorization;
