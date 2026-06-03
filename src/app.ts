@@ -7,14 +7,26 @@ import userRouter from "./routes/user";
 import cookieParser from "cookie-parser";
 import { globalErrorHandler } from "./middlewares";
 import { Config } from "./config/index";
+import logger from "./config/logger";
 
 const app = express();
 app.use(express.static("public"));
 app.use(express.json());
 app.use(cookieParser());
+
+const ALLOWED_DOMAINS = [
+    Config.ADMIN_URI,
+    Config.API_GATEWAY_URL,
+    "http://localhost:5173",
+];
+
+logger.info("Allowed Domains", {
+    ALLOWED_DOMAINS,
+});
+
 app.use(
     cors({
-        origin: [Config.ADMIN_URI!],
+        origin: ALLOWED_DOMAINS as string[],
         methods: ["GET", "POST", "DELETE", "PUT", "PATCH"],
         credentials: true,
     }),

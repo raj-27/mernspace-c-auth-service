@@ -20,7 +20,7 @@ export default expressjwt({
 
     getToken(req: Request) {
         try {
-            logger.debug("JWT middleware triggered", {
+            logger.info("JWT middleware triggered", {
                 path: req.originalUrl,
                 method: req.method,
                 jwksUri: Config.JWKS_URI!,

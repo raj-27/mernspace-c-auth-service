@@ -6,6 +6,14 @@ import { AppDataSource } from "../../src/config/data-source";
 import app from "../../src/app";
 import { Roles } from "../../src/constants";
 import { User } from "../../src/entity";
+import { describe, it } from "node:test";
+import {
+    beforeAll,
+    beforeEach,
+    afterEach,
+    afterAll,
+    expect,
+} from "@jest/globals";
 
 describe("GET /auth/self", () => {
     let connection: DataSource;

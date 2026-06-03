@@ -6,6 +6,14 @@ import createJWKSMock from "mock-jwks";
 import { Roles } from "../../src/constants";
 import { Tenant, User } from "../../src/entity";
 import { createTenant } from "../utils";
+import { describe, it } from "node:test";
+import {
+    beforeAll,
+    beforeEach,
+    afterEach,
+    afterAll,
+    expect,
+} from "@jest/globals";
 
 describe("POST /user", () => {
     let connection: DataSource;

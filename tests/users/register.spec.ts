@@ -4,6 +4,14 @@ import { DataSource } from "typeorm";
 import { AppDataSource } from "../../src/config/data-source";
 import { Roles } from "../../src/constants";
 import { RefreshToken, User } from "../../src/entity";
+import { describe, it } from "node:test";
+import {
+    beforeAll,
+    beforeEach,
+    afterEach,
+    afterAll,
+    expect,
+} from "@jest/globals";
 
 describe("POST /auth/register", () => {
     let connection: DataSource;

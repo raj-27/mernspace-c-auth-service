@@ -5,6 +5,14 @@ import app from "../../src/app";
 import { Tenant } from "../../src/entity";
 import createJWKSMock from "mock-jwks";
 import { Roles } from "../../src/constants";
+import { describe, it } from "node:test";
+import {
+    beforeAll,
+    beforeEach,
+    afterEach,
+    afterAll,
+    expect,
+} from "@jest/globals";
 
 describe("POST /tenants", () => {
     let connection: DataSource;

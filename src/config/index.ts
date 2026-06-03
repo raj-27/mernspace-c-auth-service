@@ -16,9 +16,11 @@ const {
     REFRESH_TOKEN_SECRET,
     JWKS_URI,
     ADMIN_URI,
+    API_GATEWAY_URL,
+    MAIN_DOMAIN,
 } = process.env;
 
-export const Config = {
+export const Config = Object.freeze({
     PORT,
     NODE_ENV,
     DB_HOST,
@@ -29,4 +31,6 @@ export const Config = {
     REFRESH_TOKEN_SECRET,
     JWKS_URI,
     ADMIN_URI,
-};
+    API_GATEWAY_URL,
+    MAIN_DOMAIN,
+});
