@@ -32,7 +32,7 @@ app.use(
     }),
 );
 app.get("/", async (req, res) => {
-    res.send("Welcome to auth service");
+    res.send("Namaste auth service");
 });
 
 app.use("/auth", authRouter);
